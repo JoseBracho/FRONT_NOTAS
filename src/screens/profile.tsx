@@ -1,7 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Pressable } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+
+import { sharedStyles } from '../styles/sharedStyles'
 
 const styles = StyleSheet.create({
     container: {
@@ -33,26 +35,6 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 20,
       color: '#000'
-    },
-    containerButtons: {
-      flex: 2,
-      alignItems: "center",
-      marginTop: 6
-    },
-    button: {
-      height: 50,
-      width: 150,
-      borderRadius: 20,
-      marginTop: 5,
-      marginBottom: 5,
-      padding: 15,
-      elevation: 2,
-      display: 'flex', 
-      alignItems: 'center',
-      justifyContent: 'center', 
-    },
-    buttonOpen: {
-      backgroundColor: 'red'
     },
     textStyle: {
       color: 'white',
@@ -115,13 +97,9 @@ export default function Profile({ route }) {
           <Text style={styles.titleText}>Datos Del Usuario</Text>
           <Text style={styles.text}>Nombre: {name}</Text>
           <Text style={styles.text}>Usuario: {userName}</Text>
-          <View style={styles.containerButtons}>
-            <Pressable
-              style={[styles.button, styles.buttonOpen]}
-              onPress={() => deleteProfile()}>
-              <Text style={styles.textStyle}>Eliminar perfil</Text>
-            </Pressable>
-          </View>
+        <TouchableOpacity style={sharedStyles.authButton} onPress={() => deleteProfile()}>
+          <Text style={sharedStyles.loginButtonText}>Eliminar perfil</Text>
+        </TouchableOpacity>
         </View>
       </View>
     );

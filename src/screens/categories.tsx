@@ -1,49 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Modal, FlatList, Pressable, TouchableWithoutFeedback, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Modal, FlatList, Pressable, TouchableWithoutFeedback, Button, Alert, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         width: '100%',
     },
     container2: {
-        width: '100%',
+        flex: 1,
         padding: 20
     },
     containerItem: {
-        display: 'flex', 
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
-        gap: 10
+        justifyContent: 'space-between',
+        marginVertical: 5
     },
     header: {
-        display: 'flex', 
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
-        gap: 10,
-        height: 55,
-        paddingRight: 15,
-        paddingLeft: 15,
+        justifyContent: 'space-between',
+        height: windowHeight * 0.08,
+        paddingHorizontal: 15,
         backgroundColor: '#000'
     },
     title: {
-        fontSize: 20,
+        fontSize: windowHeight * 0.025,
         color: '#fff'
     },
     text: {
-        fontSize: 16,
+        fontSize: windowHeight * 0.02,
         color: '#6f6f6f'
     },
     whiteText: {
-        fontSize: 16,
+        fontSize: windowHeight * 0.02,
         color: '#fff'
     },
     textInput: {
-        borderColor: '#6f6f6f',
+        height: windowHeight * 0.05,
+        width: windowWidth * 0.75,
+        marginVertical: 10,
+        borderRadius: 10,
         borderWidth: 1,
+        paddingHorizontal: 10,
     },
     inputContainer: {
         marginTop: 20,
@@ -52,10 +56,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 22,
     },
     modalView: {
-        margin: 20,
+        width: windowWidth * 0.8,
         backgroundColor: 'white',
         borderRadius: 20,
         padding: 35,
@@ -72,18 +75,20 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 20,
         marginTop: 5,
+        marginHorizontal: 20,
         marginBottom: 5,
         padding: 15,
         elevation: 2,
     },
     buttonClose: {
         backgroundColor: 'red',
+        marginLeft: 20,
         borderRadius: 20,
         padding: 10,
         elevation: 2,
     },
     buttonOpen: {
-        backgroundColor: '#F194FF',
+        backgroundColor: '#008000',
         marginBottom: 20
     },
     buttonCloseModal: {
@@ -95,62 +100,51 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     textHeader: {
-        fontSize: 32,
+        fontSize: windowWidth * 0.06,
     },
     headerModal: {
-        display: 'flex', 
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
-        gap: 200,
+        justifyContent: 'space-between',
+        marginBottom: 15,
     },
     footerModal: {
-        display: 'flex', 
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
         marginTop: 20,
-        gap: 200,
     },
     modalText: {
         marginBottom: 15,
-        fontSize: 20,
+        fontSize: windowWidth * 0.05,
         color: '#000',
         textAlign: 'center',
     },
     input: {
-        height: 40,
-        width: 300,
-        margin: 8,
+        height: windowHeight * 0.05,
+        width: windowWidth * 0.75,
+        marginVertical: 8,
         borderRadius: 10,
         borderWidth: 1,
-        padding: 10,
+        paddingHorizontal: 10,
     },
     inputArea: {
-        height: 150,
-        width: 300,
-        margin: 8,
+        height: windowHeight * 0.15,
+        width: windowWidth * 0.75,
+        marginVertical: 8,
         textAlignVertical: 'top',
         borderRadius: 10,
         borderWidth: 1,
-        padding: 10,
-    },
-    containerButtons: {
-        flex: 1,
-        alignItems: "center",
+        paddingHorizontal: 10,
     },
     item: {
         backgroundColor: '#F7F7F9',
         padding: 20,
         marginVertical: 8,
-        display: 'flex', 
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between', 
     },
     itemText: {
         color: '#000',
-        fontSize: 18
+        fontSize: windowWidth * 0.04
     }
 })
 
@@ -169,59 +163,59 @@ export default function Categories({ route }) {
         getCategorias()
     }, []);
 
-    const getCategorias = async () => { 
-        await axios.get('http://154.38.184.216:3501/app/categories',{
+    const getCategorias = async () => {
+        await axios.get('http://154.38.184.216:3501/app/categories', {
             headers: {
-              'authorization': route.params.token
+                'authorization': route.params.token
             }
-          })
-          .then(function (response) { 
-            id = response.data._id
-            setCategoria('')
-            setUpdateCategoria('')
-            setCategorias(response.data)
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        })
+            .then(function (response) {
+                id = response.data._id
+                setCategoria('')
+                setUpdateCategoria('')
+                setCategorias(response.data)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
-  
+
     const postCategorias = async () => {
-        await axios.post('http://154.38.184.216:3501/app/categories', {name: categoria}, {
+        await axios.post('http://154.38.184.216:3501/app/categories', { name: categoria }, {
             headers: {
                 'authorization': route.params.token
             }
-          })
-          .then(function (response) {
-            getCategorias()
-            setModalVisible(false)
-          }) 
-          .catch(function (error) {
-            console.log(error);
-            Alert.alert('Error', 'Ocurrio algo inesperado', [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ]);
-          });
+        })
+            .then(function (response) {
+                getCategorias()
+                setModalVisible(false)
+            })
+            .catch(function (error) {
+                console.log(error);
+                Alert.alert('Error', 'Ocurrio algo inesperado', [
+                    {
+                        text: 'Cancel',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                    },
+                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ]);
+            });
     };
- 
+
     const putCategorias = async () => {
-        await axios.put(`http://154.38.184.216:3501/app/categories/${ID}`, {name: updateCategoria}, {
+        await axios.put(`http://154.38.184.216:3501/app/categories/${ID}`, { name: updateCategoria }, {
             headers: {
                 'authorization': route.params.token
             }
-          })
-          .then(function (response) {
-            setModalVisible2(false)
-            getCategorias()
-          }) 
-          .catch(function (error) {
-            console.log(error);
-          });
+        })
+            .then(function (response) {
+                setModalVisible2(false)
+                getCategorias()
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     const deleteCategorias = async () => {
@@ -229,22 +223,22 @@ export default function Categories({ route }) {
             headers: {
                 'authorization': route.params.token
             }
-          })
-          .then(function (response) {
-            setModalVisible2(false)
-            getCategorias()
-          }) 
-          .catch(function (error) {
-            console.log(error);
-          });
+        })
+            .then(function (response) {
+                setModalVisible2(false)
+                getCategorias()
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
-    const renderItem = ({item}) => {
+    const renderItem = ({ item }) => {
         return (
             <View style={styles.item}>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <View style={styles.containerItem}>
-                    <Button 
+                    <Button
                         title="Editar"
                         onPress={() => {
                             setModalVisible2(true)
@@ -252,8 +246,8 @@ export default function Categories({ route }) {
                             setID(item._id)
                         }}
                     />
-                    <Button 
-                        title=">" 
+                    <Button
+                        title=">"
                         onPress={() => navigation.navigate("Notas", { _id: item._id, nota: item.name, token: token })}
                     />
                 </View>
@@ -277,22 +271,22 @@ export default function Categories({ route }) {
                     onPress={() => setModalVisible(true)}>
                     <Text style={styles.textStyle}>Crear Categoria</Text>
                 </Pressable>
-                
+
                 <FlatList
                     data={categorias}
                     renderItem={renderItem}
                     keyExtractor={item => item._id}
                 />
-                
+
                 <Modal
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() => {
-                      Alert.alert('Se creo una nota');
-                      setModalVisible(!modalVisible);
+                        Alert.alert('Se creo una nota');
+                        setModalVisible(!modalVisible);
                     }}>
-                    <View style={styles.centeredView}>
+                    <View style={[styles.centeredView, { height: windowHeight }]}>
                         <View style={styles.modalView}>
                             <View style={styles.headerModal}>
                                 <Text style={styles.modalText}>Crear categoria</Text>
@@ -323,10 +317,10 @@ export default function Categories({ route }) {
                     transparent={true}
                     visible={modalVisible2}
                     onRequestClose={() => {
-                      Alert.alert('Se edito una categoria');
-                      setModalVisible2(!modalVisible2);
+                        Alert.alert('Se edito una categoria');
+                        setModalVisible2(!modalVisible2);
                     }}>
-                    <View style={styles.centeredView}>
+                    <View style={[styles.centeredView, { height: windowHeight }]}>
                         <View style={styles.modalView}>
                             <View style={styles.headerModal}>
                                 <Text style={styles.modalText}>Editar categoria</Text>
@@ -343,7 +337,7 @@ export default function Categories({ route }) {
                                 placeholder="Nombre de la categoria"
                                 maxLength={25}
                             />
-                            <View style={styles.headerModal}>
+                            <View style={styles.footerModal}>
                                 <Pressable
                                     style={[styles.button, styles.buttonOpen]}
                                     onPress={() => putCategorias()}>

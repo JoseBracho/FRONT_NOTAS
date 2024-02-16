@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     buttonOpen: {
-        backgroundColor: '#F194FF',
+        backgroundColor: '#008000',
         marginBottom: 20
     },
     buttonCloseModal: {

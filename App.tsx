@@ -14,13 +14,13 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
-        initialRouteName="Registro"
+        initialRouteName="Inicio"
         screenOptions={{
           headerShown: false
         }}
       >
-        <Stack.Screen name="Registro" component={UserRegistration} />
         <Stack.Screen name="Inicio" component={Home} />
+        <Stack.Screen name="Registro" component={UserRegistration} />
         <Stack.Screen name="Inicio de sesion" component={Login} />
         <Stack.Screen name="Perfil" component={Profile} />
         <Stack.Screen name="Notas" component={Notes} />
